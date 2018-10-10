@@ -1,0 +1,32 @@
+{% extends 'mainapp/base.html' %}
+
+{% load staticfiles %}
+
+    {% block content %}
+        <div class="list">
+            <div class="breadcrumbs">
+                <a href="{% url 'index' %}">Главная &raquo </a>
+                <a href="{% url 'category:index' %}">Категории</a>
+                <a href="{% url 'category:category' slug=category.slug %}">{{ category.name|capfirst }}</a>
+            </div>
+
+            {% for product in category.product_set.all %}
+
+            <div class="card">
+                <div class="product">
+                    <div>
+                        <a href="{% url 'about' product.slug %}">
+                            <img class="card-img-top" src="{{ product.image.url }}" alt="{{ product.name|capfirst }}">
+                        </a>
+                    </div>
+                    <div class="card-body">
+                        <h4 class="card-title">{{ product.name|upper }}</h4>
+                        <a href="{% url 'about' product.slug %}" class="btn">Описание товара</a>
+                    </div>
+                </div>
+            </div>
+
+            {% endfor %}
+
+        </div>
+    {% endblock %}

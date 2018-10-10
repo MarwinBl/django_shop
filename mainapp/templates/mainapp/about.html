@@ -1,0 +1,28 @@
+{% extends 'mainapp/base.html' %}
+
+{% load staticfiles %}
+
+{% block content %}
+
+    <div class="list">
+        <div class="breadcrumbs">
+            <a href="{% url 'index' %}">Главная &raquo </a>
+            <a href="{% url 'category:index' %}">Категории &raquo </a>
+            <a href="{% url 'about' product %}">{{ product|capfirst }}</a>
+        </div>
+        <div class="card">
+            <div class="product">
+                <img src="{{ product.image.url }}" alt="{{ product|capfirst }}">
+                <a class="buy">Купить</a>
+            </div>
+        </div>
+        <div class="card">
+            <h4>{{ product.name|upper }}</h4>
+            <h3>Описание товара</h3>
+            <p>{{ product.short_desc }}</p>
+            <h3>Подробное описание товара</h3>
+            <p>{{ product.description }}</p>
+        </div>
+    </div>
+
+{% endblock %}

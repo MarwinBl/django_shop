@@ -1,0 +1,49 @@
+{% extends 'mainapp/base.html' %}
+
+{% load staticfiles %}
+
+    {% block header-adv %}
+        <div class="adv">
+            <div class="h-buy">
+                <h3>Alpa новая модель {% now 'F Y' %}</h3>
+                <p>Прекрасный смарт-рюкзак как для городской эксплуатации, так и выездов на природу</p>
+                <a href="{% url 'about' product='palmer' %}">Купить</a>
+            </div>
+            <div class="welcome">
+                <h3>Добро пожаловать в bromobarcelona</h3>
+                <p>Магазин умных сумок и рюкзаков</p>
+            </div>
+        </div>
+    {% endblock %}
+
+    {% block content %}
+        <div class="list">
+            <div class="name-col">Новая коллекция</div>
+
+            {% for product in products %}
+                <div class="card">
+                    <div>
+                        <a href="{{ product.image.url }}">
+                            <img class="card-img-top" src="{{ product.image.url }}" alt="{{ product.name|upper }}">
+                        </a>
+                    </div>
+                    <div class="card-body">
+                        <h4 class="card-title">{{ product.name|capfirst }}</h4>
+                        <a href="{{ product.get_absolute_url }}" class="btn btn-primary">Описание товара</a>
+                    </div>
+                </div>
+            {% endfor %}
+
+        </div>
+        <div class="insta-feed">
+            <div><img src="{% static 'img/insta icon.png' %}" alt=""> Instagram feed: <span class="htag">#bromobarcelona</span></div>
+            <div class="inst">
+                <img src="{% static 'img/Livello 25.png' %}" alt="live 25">
+                <img src="{% static 'img/Livello 26.png' %}" alt="live 26">
+                <img src="{% static 'img/Livello 27.png' %}" alt="live 27">
+                <img src="{% static 'img/Livello 28.png' %}" alt="live 28">
+                <img src="{% static 'img/Livello 29.png' %}" alt="live 29">
+                <img src="{% static 'img/Livello 30.png' %}" alt="live 30">
+            </div>
+        </div>
+    {% endblock %}
