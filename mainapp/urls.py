@@ -1,4 +1,4 @@
-from django.urls import re_path, path
+from django.urls import path
 import mainapp.views as views
 
 urlpatterns = [
