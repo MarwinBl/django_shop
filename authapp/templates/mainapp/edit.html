@@ -1,0 +1,17 @@
+{% extends 'authapp/base.html' %}
+
+{% block title %}
+<title>Редактировать профиль</title>
+{% endblock %}
+
+{% block container %}
+    <h3 class="text-muted">Редактировать профиль</h3>
+    {% if user.avatar %}
+        <img src="{{ user.avatar.url }}" alt="avatar">
+    {% endif %}
+    <form action="{% url 'auth:edit' %}" method="post" enctype="multipart/form-data">
+        {% csrf_token %}
+        {{ edit_form.as_p }}
+        <input class="form-control" type="submit" value="сохранить">
+    </form>
+{% endblock %}

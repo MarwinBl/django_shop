@@ -1,0 +1,14 @@
+{% extends 'authapp/base.html' %}
+
+{% block title %}
+    <title>Регистрация</title>
+{% endblock %}
+
+{% block container %}
+    <h3 class="text-muted">Регистрация</h3>
+    <form action="{% url 'auth:registration' %}" method="post" enctype="multipart/form-data">
+        {% csrf_token %}
+        {{ reg_form.as_p }}
+        <input class="form-control" type="submit" value="зарегистрироваться">
+    </form>
+{% endblock %}

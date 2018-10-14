@@ -1,0 +1,14 @@
+{% extends 'authapp/base.html' %}
+
+{% block title %}
+    <title>Вход</title>
+{% endblock %}
+
+{% block container %}
+    <h3 class="text-muted">Вход</h3>
+    <form action="{% url 'auth:login' %}" method="post">
+        {% csrf_token %}
+        {{ login_form.as_p }}
+        <input class="form-control" type="submit" value="войти">
+    </form>
+{% endblock %}

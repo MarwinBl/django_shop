@@ -22,6 +22,7 @@ import mainapp.views as mainapp
 
 urlpatterns = [
     path('admin/', admin.site.urls),
+    path('auth/', include(('authapp.urls', 'authapp'), namespace='auth')),
 
     path('', mainapp.index, name='index'),
     path('category/', include(('mainapp.urls', 'mainapp'), namespace='category')),
