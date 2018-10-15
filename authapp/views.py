@@ -37,6 +37,6 @@ def edit(request):
         edit_form = ShopUserEditForm(request.POST, request.FILES, instance=request.user)
         if edit_form.is_valid():
             edit_form.save()
-        return render(request, 'mainapp/edit.html', {'edit_form': edit_form})
+        return render(request, 'authapp/edit.html', {'edit_form': edit_form})
     edit_form = ShopUserEditForm(instance=request.user)
-    return render(request, 'mainapp/edit.html', {'edit_form': edit_form})
+    return render(request, 'authapp/edit.html', {'edit_form': edit_form})

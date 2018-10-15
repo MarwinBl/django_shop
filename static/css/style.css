@@ -304,6 +304,7 @@ a[href='https://instagram.com/']>div{
 
 .category-about{
     display: flex;
+    width: 100%;
     flex-direction: column;
     padding: 5px 15px;
     color: #2f54a8b5;

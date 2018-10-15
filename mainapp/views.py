@@ -1,4 +1,4 @@
-from django.shortcuts import render
+from django.shortcuts import render, get_object_or_404
 from mainapp.models import *
 
 
@@ -17,20 +17,19 @@ def index(request):
     return render(request, 'mainapp/index.html', context)
 
 
-def categories(request):
-    _categories = Category.objects.all()
-    context['categories'] = _categories
-    return render(request, 'mainapp/categories.html', context)
-
-
-def category(request, slug):
-    _category = Category.objects.get(slug=slug)
-    context['category'] = _category
-    return render(request, 'mainapp/category.html', context)
+def category(request, slug=None):
+    if slug:
+        _category = get_object_or_404(Category, slug=slug)
+        context['category'] = _category
+        return render(request, 'mainapp/category.html', context)
+    else:
+        _categories = Category.objects.all()
+        context['categories'] = _categories
+        return render(request, 'mainapp/categories.html', context)
 
 
 def about(request, product):
-    _product = Product.objects.get(name=product)
+    _product = get_object_or_404(Product, name=product)
     context['product'] = _product
     return render(request, 'mainapp/about.html', context)
 

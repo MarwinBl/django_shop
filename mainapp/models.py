@@ -12,7 +12,7 @@ class Category(models.Model):
 
 
 class Product(models.Model):
-    objects = None
+    # objects = None
     category = models.ManyToManyField(Category)
     name = models.CharField(verbose_name='Название продукта', max_length=128, unique=True)
     slug = models.SlugField(max_length=150, unique=True)
