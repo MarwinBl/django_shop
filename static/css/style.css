@@ -58,7 +58,6 @@ header .container{
     display: flex;
     flex-direction: column;
     justify-content: space-between;
-    min-height: 700px;
 }
 
 .top, .adv{
@@ -119,23 +118,27 @@ a[href='https://instagram.com/']>div{
 
 .h-buy{
     max-width: 315px;
-    background-color: #2f2f2f4a;
-    padding: 10px;
+    background-color: #2f53a7;
+    position: relative;
 }
 
 .h-buy>h3{
     font-weight: 700;
     color: #fff51f;
-    margin-bottom: 30px;
+    margin-top: 35px;
+}
+
+.h-buy>.price{
+    right: 0;
 }
 
 .h-buy>p{
     font-size: 18px;
     color: #fff51f;
-    margin-bottom: 62px;
 }
 
 .h-buy>a{
+    display: inline-block;
     background-color: #fff51f;
     padding: 10px;
 }
@@ -192,15 +195,16 @@ a[href='https://instagram.com/']>div{
 
 .nav-link:hover .submenu{
     display: block;
+    z-index: 10000;
 }
 
 .submenu{
     list-style-type: none;
     display: none;
     position: absolute;
-    background-color: #02229c1f;
+    background-color: #c8cee0;
     text-align: left;
-    top: 38px;
+    top: 44px;
 }
 
 .submenu li{
@@ -224,14 +228,38 @@ a[href='https://instagram.com/']>div{
 
 .card{
     margin: 10px;
-    max-width: 450px;
+    max-width: 250px;
     background-color: inherit;
-    border: none;
     position: static;
 }
 
-.card>h4, .card>h3{
+.action{
+    cursor: pointer;
+}
+
+.about-card>h4, .about-card>h3{
     margin-top: 20px;
+}
+
+.about-card{
+    max-width: 450px;
+    margin: 10px;
+}
+
+.list-group-item{
+    text-align: center;
+}
+
+.list-group-item .badge{
+    font-size: 100%;
+}
+
+.list-group-item .sign{
+    display: inline-block;
+    padding-top: 3px;
+    width: 13px;
+    height: 24px;
+    color: white;
 }
 
 .name-col{
@@ -336,6 +364,19 @@ a[href='https://instagram.com/']>div{
     line-height: 25px;
 }
 
+.to-basket{
+    position: absolute;
+    right: 0;
+    top: 0;
+}
+
+.price{
+    position: absolute;
+    padding: 5px;
+    background-color: #ed3b32;
+    color: whitesmoke;
+}
+
 .buy{
     display: block;
     cursor: pointer;
@@ -374,8 +415,12 @@ h4+h3+p{
     padding: 15px;
 }
 
-.about>img, card-img-top{
+.about>img, .card-img-top{
     width: 100%;
+}
+
+.about-prod{
+    position: relative;
 }
 
 .hello{
@@ -511,7 +556,7 @@ h4+h3+p{
     max-width: 200px;
 }
 
-.alert{
+.alert-dismissible{
     position: absolute;
     top: 5px;
     right: 5px;
@@ -557,14 +602,6 @@ h4+h3+p{
     .welcome{
         height: 100%;
         margin-top: 0;
-    }
-
-    .card{
-        padding: 5px;
-    }
-
-    .card .product{
-        text-align: center;
     }
 
 }

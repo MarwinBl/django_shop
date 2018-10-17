@@ -13,6 +13,11 @@
             {{ user.username|default:'Пользователь' }}
         </a>
     </div>
+    <a id="basket" href="{% url 'basket:index' %}" class="btn btn-light">
+        {% if basket %}<span id="basket-count" class="badge badge-dark">{{ basket.count }} шт</span>
+                    / <span id="basket-summ" class="badge badge-dark">{{ basket.total_price }} руб</span>
+        {% else %}Корзина пуста{% endif %}
+    </a>
 
 {% else %}
 

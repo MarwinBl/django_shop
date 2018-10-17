@@ -1,9 +1,8 @@
 <ul class="nav">
 {% for link in memu_link %}
 
-    <li class="nav-link
-        {% if link.href == request.resolver_match.view_name %}active{% endif %}
-    "><a href="{% url link.href %}">{{ link.name|upper }}</a>
+    <li class="nav-link {% if link.href == request.resolver_match.view_name %}active{% endif %}">
+        <a href="{% url link.href %}">{{ link.name|upper }}</a>
         {% if link.submenu %}
             <ul class="submenu">
                 {% for sub_link in link.submenu %}

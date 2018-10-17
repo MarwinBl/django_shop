@@ -1,4 +1,4 @@
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect, reverse
 from django.contrib import auth
 
 from authapp.forms import ShopUserLoginForm, ShopUserRegistrationForm, ShopUserEditForm
@@ -6,16 +6,20 @@ from authapp.forms import ShopUserLoginForm, ShopUserRegistrationForm, ShopUserE
 
 def login(request):
     login_form = ShopUserLoginForm(data=request.POST or None)
+    index_page = reverse('index')
+    next = request.GET.get('next', index_page)
     if request.method == 'POST' and login_form.is_valid():
         username = request.POST['username']
         password = request.POST['password']
-
         user = auth.authenticate(username=username, password=password)
+
         if user and user.is_active:
             auth.login(request, user)
-            return redirect('index')
+            return redirect(request.POST.get('next', index_page))
 
-    context = {'login_form': login_form}
+    context = {'login_form': login_form,
+               'next': next
+               }
     return render(request, 'authapp/login.html', context)
 
 

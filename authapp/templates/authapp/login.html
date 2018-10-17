@@ -6,8 +6,9 @@
 
 {% block container %}
     <h3 class="text-muted">Вход</h3>
-    <form action="{% url 'auth:login' %}" method="post">
+    <form action="{% url 'auth:login' %}?next={{ next }}" method="post">
         {% csrf_token %}
+        <input type="hidden" name="next" value="{{ next }}">
         {{ login_form.as_p }}
         <input class="form-control" type="submit" value="войти">
     </form>

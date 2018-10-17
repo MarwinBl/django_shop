@@ -1,0 +1,56 @@
+{% extends 'mainapp/base.html' %}
+{% load staticfiles %}
+
+{% block title %}
+    <title>Корзина</title>
+{% endblock %}
+
+{% block content %}
+
+    <div class="card-group">
+    {% if basket_items %}
+        {% for item in basket_items %}
+            <div class="card">
+                <div class="price">{{ item.product.price }}</div>
+                <a href="{{ item.product.get_absolute_url }}">
+                    <img class="card-img-top" src="{{ item.product.image.url }}" alt="{{ item.product.name }}">
+                </a>
+                <div class="card-body">
+                    <h5 class="card-title"><a href="{{ item.product.get_absolute_url }}">{{ item.product.name }}</a></h5>
+                    <p class="card-text">{{ item.product.short_desc }}</p>
+                </div>
+                <ul class="list-group list-group-flush">
+                    <li class="list-group-item">
+                        <span class="badge badge-pill badge-primary">
+                            <a href="{% url 'basket:del' slug=item.product.slug quantity=1 %}" class="sign action">-</a>
+                        </span>
+                        <span id="{{ item.product.name }}" class="badge badge-pill">{{ item.quantity }}</span>
+                        <span href="{% url 'basket:add' slug=item.product.slug %}" class="badge badge-pill badge-primary">
+                            <a href="{% url 'basket:add' slug=item.product.slug %}" class="sign action">+</a>
+                        </span>
+                    </li>
+                    <li class="list-group-item">
+                        <a href="{% url 'basket:del' slug=item.product.slug quantity=item.quantity %}" class="action">удалить все</a>
+                    </li>
+                </ul>
+                <div class="card-footer">
+                    <small class="text-muted">{{ item.add_datetime|date:"d M Y H:i" }}</small>
+                </div>
+            </div>
+        {% endfor %}
+        <div style="display: none" id="basket-empty" class="alert alert-info" role="alert">
+            Корзина пуста
+        </div>
+    {% else %}
+        <div id="basket-empty" class="alert alert-info" role="alert">
+            Корзина пуста
+        </div>
+    {% endif %}
+    </div>
+
+{% endblock %}
+
+{% block js %}
+    {{ block.super }}
+    <script src="{% static 'js/basketapp/basket.js' %}"></script>
+{% endblock %}

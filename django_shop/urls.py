@@ -25,9 +25,10 @@ urlpatterns = [
     path('auth/', include(('authapp.urls', 'authapp'), namespace='auth')),
 
     path('', mainapp.index, name='index'),
-    path('category/', include(('mainapp.urls', 'mainapp'), namespace='category')),
-    path('about/<str:product>/', mainapp.about, name='about'),
     path('contact/', mainapp.contact, name='contact'),
+    path('about/<str:product>/', mainapp.about, name='about'),
+    path('category/', include(('mainapp.urls', 'mainapp'), namespace='category')),
+    path('basket/', include(('basketapp.urls', 'basketapp'), namespace='basket')),
 ]
 
 

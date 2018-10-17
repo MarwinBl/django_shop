@@ -2,31 +2,40 @@
 
 {% load staticfiles %}
 
-    {% block content %}
-        <div class="list">
-            <div class="breadcrumbs">
-                <a href="{% url 'index' %}">Главная &raquo </a>
-                <a href="{% url 'category:index' %}">Категории &raquo </a>
-                <a href="{% url 'category:category' slug=category.slug %}">{{ category.name|capfirst }}</a>
-            </div>
+{% block content %}
+    <div class="list">
+        <div class="breadcrumbs">
+            <a href="{% url 'index' %}">Главная &raquo </a>
+            <a href="{% url 'category:index' %}">Категории &raquo </a>
+            <a href="{% url 'category:category' slug=category.slug %}">{{ category.name|capfirst }}</a>
+        </div>
 
-            {% for product in category.product_set.all %}
+        {% for product in category.product_set.all %}
 
-            <div class="card">
-                <div class="product">
-                    <div>
-                        <a href="{% url 'about' product.slug %}">
-                            <img class="card-img-top" src="{{ product.image.url }}" alt="{{ product.name|capfirst }}">
-                        </a>
-                    </div>
-                    <div>
-                        <h4>{{ product.name|upper }}</h4>
-                        <a href="{% url 'about' product.slug %}">Описание товара</a>
-                    </div>
+        <div class="card">
+            <div class="price">{{ product.price }}</div>
+            <div class="product">
+                <div>
+                    <a href="{% url 'about' product.slug %}">
+                        <img class="card-img-top" src="{{ product.image.url }}" alt="{{ product.name|capfirst }}">
+                    </a>
+                </div>
+                <div class="about-prod">
+                    <h4>{{ product.name|capfirst }}</h4>
+                    <a href="{{ product.get_absolute_url }}">Описание товара</a>
+                    <a href="{% url 'basket:add' slug=product.slug %}" class="btn btn-danger btn-sm to-basket action">в корзину</a>
                 </div>
             </div>
-
-            {% endfor %}
-
         </div>
-    {% endblock %}
+
+        {% endfor %}
+
+    </div>
+{% endblock %}
+
+{% block js %}
+
+    {{ block.super }}
+    <script src="{% static 'js/mainapp/basket.js' %}"></script>
+
+{% endblock %}

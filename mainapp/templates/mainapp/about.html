@@ -11,12 +11,13 @@
             <a href="{% url 'about' product %}">{{ product|capfirst }}</a>
         </div>
         <div class="card">
+            <div class="price">{{ product.price }}</div>
             <div class="product">
                 <img src="{{ product.image.url }}" alt="{{ product|capfirst }}">
-                <a class="buy">Купить</a>
+                <a href="{% url 'basket:add' slug=product.slug %}" class="buy action">в корзину</a>
             </div>
         </div>
-        <div class="card">
+        <div class="about-card">
             <h4>{{ product.name|upper }}</h4>
             <h3>Описание товара</h3>
             <p>{{ product.short_desc }}</p>
@@ -24,5 +25,12 @@
             <p>{{ product.description }}</p>
         </div>
     </div>
+
+{% endblock %}
+
+{% block js %}
+
+    {{ block.super }}
+    <script src="{% static 'js/mainapp/basket.js' %}"></script>
 
 {% endblock %}

@@ -1,5 +1,6 @@
 from django.shortcuts import render, get_object_or_404
 from mainapp.models import *
+from basketapp.views import get_basket, get_hot_product, get_same_products
 
 
 MENU = (
@@ -12,12 +13,14 @@ context = {'memu_link': MENU}
 
 
 def index(request):
-    products = Product.objects.all()[:3]
-    context['products'] = products
+    context['basket'] = get_basket(request.user)
+    context['hot_product'] = get_hot_product()
+    context['same_product'] = get_same_products(context['hot_product'])
     return render(request, 'mainapp/index.html', context)
 
 
 def category(request, slug=None):
+    context['basket'] = get_basket(request.user)
     if slug:
         _category = get_object_or_404(Category, slug=slug)
         context['category'] = _category
@@ -29,10 +32,12 @@ def category(request, slug=None):
 
 
 def about(request, product):
+    context['basket'] = get_basket(request.user)
     _product = get_object_or_404(Product, name=product)
     context['product'] = _product
     return render(request, 'mainapp/about.html', context)
 
 
 def contact(request):
+    context['basket'] = get_basket(request.user)
     return render(request, 'mainapp/contact.html', context)
