@@ -1,0 +1,31 @@
+{% extends 'adminapp/base.html' %}
+{% load staticfiles %}
+
+{% block content %}
+    <div class="product_read">
+        <div class="product_name">
+            Продукт <strong>{{ product.name|title }}</strong>
+        </div>
+        <img src="{{ product.image.url }}"
+             alt="{{ product.name }}">
+        <div class="summary">
+            <b>цена</b>
+            <p>{{ product.price }} руб</p>
+            <b>количество</b>
+            <p>{{ product.quantity }}</p>
+            <b>в каталоге</b>
+            <p>{% if product.is_active %}да{% else %}нет{% endif %}</p>
+            <div class="btn-group" role="group">
+                <a href="{% url 'admin:product_update' product.pk %}" class="btn btn-primary">редактировать</a>
+                <a href="{% url 'admin:product_delete' product.pk %}" class="btn btn-primary">удалить</a>
+                <a href="{% url 'admin:products' product.category.first.pk %}" class="btn btn-primary">назад</a>
+            </div>
+        </div>
+        <div class="product_desc">
+            <b>краткая информация</b>
+            <p>{{ product.short_desc }}</p>
+            <b>подробная информация</b>
+            <p>{{ product.description }}</p>
+        </div>
+    </div>
+{% endblock %}

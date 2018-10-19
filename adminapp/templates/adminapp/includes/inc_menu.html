@@ -1,0 +1,24 @@
+<nav class="navbar navbar-expand-lg navbar-light bg-light">
+    <a class="navbar-brand" href="#">Админка</a>
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavAltMarkup" aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
+        <div class="navbar-nav">
+            <a class="nav-item nav-link" href="{% url 'index' %}">На сайт</a>
+            <a class="nav-item nav-link
+                {% if request.resolver_match.url_name == 'user_read' %}
+                    active
+                {% endif %}" href="{% url 'admin:user_read' %}
+            ">Пользователи</a>
+            <a class="nav-item nav-link
+                {% if request.resolver_match.url_name == 'category_read' or category.name %}
+                    active
+                {% endif %}" href="{% url 'admin:category_read' %}
+            ">Категории</a>
+            {% if category %}
+                <a class="nav-item nav-link active" href="{% url 'admin:products' category.pk %}">{{ category.name }}</a>
+            {% endif %}
+        </div>
+    </div>
+</nav>

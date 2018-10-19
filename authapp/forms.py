@@ -1,6 +1,6 @@
 from django.contrib.auth.forms import AuthenticationForm, UserCreationForm, UserChangeForm
 from django.forms.utils import ErrorList
-from django.forms import ValidationError, HiddenInput, FileInput
+from django.forms import ValidationError, HiddenInput
 
 from authapp.models import ShopUser
 
@@ -51,18 +51,16 @@ class ShopUserRegistrationForm(UserCreationForm):
 class ShopUserEditForm(UserChangeForm):
     class Meta:
         model = ShopUser
-        fields = ('username', 'first_name', 'email', 'age', 'avatar')
+        fields = ('first_name', 'last_name', 'age', 'avatar', 'password')
 
     def __init__(self, *args, **kwargs):
-        super(ShopUserEditForm, self).__init__(error_class = ErrList, *args, **kwargs)
+        super(ShopUserEditForm, self).__init__(error_class=ErrList, *args, **kwargs)
         for field_name, field in self.fields.items():
             if field_name == 'avatar':
-                field.label = 'Изменить фото'
-                field.widget = FileInput()
-            elif field_name == 'password':
-                self.fields.pop(field_name)
-            else:
-                field.widget.attrs['class'] = 'form-control'
+                continue
+            if field_name == 'password' and not self.__module__.startswith('adminapp'):
+                field.widget = HiddenInput()
+            field.widget.attrs['class'] = 'form-control'
             field.help_text = ''
 
     def clean_age(self):

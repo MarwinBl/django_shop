@@ -1,0 +1,27 @@
+{% extends 'adminapp/base.html' %}
+
+{% load staticfiles %}
+
+{% block content %}
+    <a class="btn btn-info m-1" href={% url 'admin:product_create' category.pk %}>новый продукт</a>
+    <div class="card-deck">
+    {% for object in objects %}
+        <div class="card">
+            <img class="card-img-top" src="{{object.image.url }}" alt="{{ object.name }}">
+            <div class="card-body">
+                <h5 class="card-title">{{ object.name|title }}</h5>
+                <p class="card-text">{{ object.short_desc }}</p>
+                <div>
+                    <a class="btn btn-link btn-sm" href="{% url 'admin:product_read' object.pk %}">подробнее</a>
+                    <a class="btn btn-link btn-sm" href="{% url 'admin:product_update' object.pk %}">редактировать</a>
+                    <a class="btn btn-link btn-sm" href="{% url 'admin:product_delete' object.pk %}">удалить</a>
+                </div>
+            </div>
+            <div class="card-footer">
+                <small class="text-muted">цена: {{ object.price }}</small>
+                <small class="text-muted">кол-во: {{ object.quantity }}</small>
+            </div>
+        </div>
+    {% endfor%}
+    </div>
+{% endblock %}

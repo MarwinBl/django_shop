@@ -5,7 +5,7 @@ from basketapp.views import get_basket, get_hot_product, get_same_products
 
 MENU = (
     {'href': 'index', 'name': 'главная', 'submenu': False},
-    {'href': 'category:index', 'name': 'категории', 'submenu': Category.objects.all()},
+    {'href': 'category:index', 'name': 'категории', 'submenu': Category.objects.filter(is_active=True)},
     {'href': 'contact', 'name': 'контакты', 'submenu': False},
 )
 
@@ -22,11 +22,11 @@ def index(request):
 def category(request, slug=None):
     context['basket'] = get_basket(request.user)
     if slug:
-        _category = get_object_or_404(Category, slug=slug)
+        _category = get_object_or_404(Category, slug=slug, is_active=True)
         context['category'] = _category
         return render(request, 'mainapp/category.html', context)
     else:
-        _categories = Category.objects.all()
+        _categories = Category.objects.filter(is_active=True)
         context['categories'] = _categories
         return render(request, 'mainapp/categories.html', context)
 

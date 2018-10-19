@@ -21,7 +21,7 @@ from django.conf.urls.static import static
 import mainapp.views as mainapp
 
 urlpatterns = [
-    path('admin/', admin.site.urls),
+    path('admin/', include(('adminapp.urls', 'adminapp'), namespace='admin')),
     path('auth/', include(('authapp.urls', 'authapp'), namespace='auth')),
 
     path('', mainapp.index, name='index'),

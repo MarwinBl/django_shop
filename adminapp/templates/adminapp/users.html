@@ -1,0 +1,43 @@
+{% extends 'adminapp/base.html' %}
+
+{% load staticfiles %}
+
+{% block content %}
+    <a class="btn btn-info m-1" href={% url 'admin:user_create' %}>новый пользователь</a>
+    <div class="list-group">
+        {% for object in objects %}
+            <div class="list-group-item list-group-item-info list-group-item-action flex-column align-items-start m-1
+                                {% if not object.is_active %}disabled{% endif %}">
+                <div class="d-flex justify-content-between">
+                    <img class="rounded float-left" width="50px" height="50px" src="{{ object.avatar.url }}" alt="{{ object.username }}">
+                    <h5 class="mb-1">{{ object.username }}</h5>
+                    <p class="mb-1">
+                        {% if object.first_name %}
+                            <small>{{ object.first_name|title }}</small>
+                            {% if object.last_name %}
+                                <small>{{ object.last_name|title }}</small>
+                            {% endif %}
+                        {% endif %}
+                    </p>
+                    <small>
+                    {% if object.is_superuser %}
+                        администратор
+                    {% else %}
+                        пользователь
+                    {% endif %}
+                    </small>
+                </div>
+                <hr>
+                <div class="btn-group" role="group">
+                    <a class="btn btn-primary btn-sm" href="{% url 'admin:user_update' object.pk %}">редактировать</a>
+                    <a class="btn btn-primary btn-sm" href="{% url 'admin:user_delete' object.pk %}">удалить</a>
+                </div>
+                <div>
+                    <span class="badge badge-pill badge-info">возраст: {{ object.age }}</span>
+                    <span class="badge badge-pill badge-info">email: {{ object.email }}</span>
+                    <span class="badge badge-pill badge-info">последний вход: {{ object.last_login }}</span>
+                </div>
+            </div>
+        {% endfor%}
+    </div>
+{% endblock %}

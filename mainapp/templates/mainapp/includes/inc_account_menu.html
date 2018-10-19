@@ -5,12 +5,15 @@
             <button type="button" class="btn btn-info dropdown-toggle dropdown-toggle-split" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"></button>
             <div class="dropdown-menu">
                 <a class="dropdown-item" href="{% url 'auth:edit' %}">Профиль</a>
+                {% if user.is_superuser %}
+                    <a class="dropdown-item" href="{% url 'admin:user_read' %}">Админка</a>
+                {% endif %}
                 <div class="dropdown-divider"></div>
                 <a class="dropdown-item" href="{% url 'auth:logout' %}">Выход</a>
             </div>
         </div>
         <a class="btn btn-info" href="{% url 'auth:edit' %}">
-            {{ user.username|default:'Пользователь' }}
+            {{ user.username }}
         </a>
     </div>
     <a id="basket" href="{% url 'basket:index' %}" class="btn btn-light">

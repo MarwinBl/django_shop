@@ -5,9 +5,9 @@
 {% endblock %}
 
 {% block container %}
-    <h3 class="text-muted">Редактировать профиль</h3>
+    <h3 class="text-muted">Редактировать профиль: {{ user.username }}</h3>
     {% if user.avatar %}
-        <img src="{{ user.avatar.url }}" alt="avatar">
+        <img width="100px" height="100px" src="{{ user.avatar.url }}" alt="avatar">
     {% endif %}
     <form action="{% url 'auth:edit' %}" method="post" enctype="multipart/form-data">
         {% csrf_token %}

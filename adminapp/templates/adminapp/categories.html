@@ -1,0 +1,33 @@
+{% extends 'adminapp/base.html' %}
+
+{% load staticfiles %}
+
+{% block content %}
+    <a class="btn btn-info m-1" href={% url 'admin:category_create' %}>новая категория</a>
+    <div class="list-group">
+    {% for object in objects %}
+        <div class="list-group-item list-group-item-info flex-column align-items-start m-1
+            {% if not object.is_active %}
+             disabled
+           {% endif %}">
+            <h5 class="category_name">
+                {{ object.name|title }}
+            </h5>
+            <div class="btn-group" role="group">
+                <a class="btn btn-primary btn-sm" href={% url 'admin:products' object.pk %}>
+                    товары категории
+                </a>
+                <a class="btn btn-primary btn-sm" href={% url 'admin:category_update' object.pk %}>
+                    редактировать
+                </a>
+                <a class="btn btn-primary btn-sm" href={% url 'admin:category_delete' object.pk %}>
+                    удалить
+                </a>
+            </div>
+            <small>
+                {{ object.description }}
+            </small>
+        </div>
+    {% endfor%}
+    </div>
+{% endblock %}
