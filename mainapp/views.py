@@ -1,4 +1,5 @@
 from django.shortcuts import render, get_object_or_404
+from django.core.paginator import Paginator, EmptyPage
 from mainapp.models import *
 from basketapp.views import get_basket, get_hot_product, get_same_products
 
@@ -19,11 +20,19 @@ def index(request):
     return render(request, 'mainapp/index.html', context)
 
 
-def category(request, slug=None):
+def category(request, slug=None, page=1):
     context['basket'] = get_basket(request.user)
     if slug:
-        _category = get_object_or_404(Category, slug=slug, is_active=True)
-        context['category'] = _category
+        category = get_object_or_404(Category, slug=slug, is_active=True)
+        products = category.product_set.filter(is_active=True).order_by('-price')
+        paginator = Paginator(products, 2)
+        try:
+            products_paginator = paginator.page(page)
+        except EmptyPage:
+            products_paginator = paginator.page(paginator.num_pages)
+        context['products'] = products_paginator
+        context['category'] = category
+
         return render(request, 'mainapp/category.html', context)
     else:
         _categories = Category.objects.filter(is_active=True)
@@ -33,7 +42,7 @@ def category(request, slug=None):
 
 def about(request, product):
     context['basket'] = get_basket(request.user)
-    _product = get_object_or_404(Product, name=product)
+    _product = get_object_or_404(Product, slug=product, is_active=True)
     context['product'] = _product
     return render(request, 'mainapp/about.html', context)
 

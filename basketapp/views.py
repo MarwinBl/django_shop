@@ -11,11 +11,11 @@ def get_basket(user):
 
 
 def get_hot_product():
-    return Product.objects.all().order_by('-quantity')[0]
+    return Product.objects.filter(is_active=True).order_by('-quantity')[0]
 
 
 def get_same_products(product):
-    return Product.objects.filter(category__in=product.category.all()).exclude(pk=product.pk)[:3]
+    return Product.objects.filter(category__in=product.category.all(), is_active=True).exclude(pk=product.pk)[:3]
 
 
 def ajax_response(request, name, quantity):
@@ -49,7 +49,7 @@ def add_product(request, slug):
     item = old_item or new_item
 
     if request.is_ajax():
-        return ajax_response(request, item.product.name, item.quantity)
+        return ajax_response(request, item.product.slug, item.quantity)
 
     if 'login' in request.META.get('HTTP_REFERER'):
         return redirect('about', product=slug)
@@ -68,6 +68,6 @@ def del_product(request, slug, quantity):
         basket_item.save()
 
     if request.is_ajax():
-        return ajax_response(request, basket_item.product.name, 0 if is_delite else basket_item.quantity)
+        return ajax_response(request, basket_item.product.slug, 0 if is_delite else basket_item.quantity)
 
     return redirect(request.META.get('HTTP_REFERER'))

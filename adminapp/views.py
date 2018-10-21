@@ -1,100 +1,94 @@
 from django.shortcuts import render, get_object_or_404, redirect
+from django.urls import reverse_lazy
 from django.contrib.auth.decorators import user_passes_test
+from django.views.generic.edit import CreateView, UpdateView, DeleteView
+from django.views.generic.detail import DetailView
 from mainapp.models import Product, Category
 from authapp.models import ShopUser
 from authapp.forms import ShopUserRegistrationForm
 from adminapp.forms import ShopUserAdminEditForm, CategoryAdminEditForm, ProductAdminEditForm
+from .utils import AdminListView
 
 
-@user_passes_test(lambda u: u.is_superuser)
-def user_read(request):
-    users_list = ShopUser.objects.all().order_by('-is_active', '-is_superuser', '-is_staff', 'username')
-    return render(request, 'adminapp/users.html', {'objects': users_list})
+class UserListView(AdminListView):
+    model = ShopUser
+    template_name = 'adminapp/users.html'
+    ordering = ('-is_active', '-is_superuser', '-is_staff', 'username')
 
 
-@user_passes_test(lambda u: u.is_superuser)
-def user_create(request):
-    form = ShopUserRegistrationForm(request.POST or None, request.FILES or None)
-    if request.method == 'POST' and  form.is_valid():
-        form.save()
-        return redirect('admin:user_read')
-    return render(request, 'adminapp/user_update.html', {'form': form})
+class UserCreateView(CreateView):
+    form_class = ShopUserRegistrationForm
+    template_name = 'adminapp/user_update.html'
+    success_url = reverse_lazy('admin:user_read')
 
 
-@user_passes_test(lambda u: u.is_superuser)
-def user_update(request, pk):
-    user = get_object_or_404(ShopUser, pk=pk)
-    if request.method == 'POST':
-        form = ShopUserAdminEditForm(request.POST, request.FILES, instance=user)
-        if form.is_valid():
-            form.save()
-            return redirect('admin:user_update', pk=user.pk)
-    else:
-        form = ShopUserAdminEditForm(instance=user)
-    return render(request, 'adminapp/user_update.html', {'form': form})
+class UserUpdateView(UpdateView):
+    form_class = ShopUserAdminEditForm
+    model = ShopUser
+    template_name = 'adminapp/user_update.html'
+    success_url = reverse_lazy('admin:user_read')
 
 
-@user_passes_test(lambda u: u.is_superuser)
-def user_delete(request, pk):
-    user = get_object_or_404(ShopUser, pk=pk)
-    if request.method == 'POST':
-        user.is_active = False
-        user.save()
-        return redirect('admin:user_read')
-    return render(request, 'adminapp/user_delete.html', {'user': user})
+class UserDeleteView(DeleteView):
+    model = ShopUser
+    template_name = 'adminapp/user_delete.html'
+    success_url = reverse_lazy('admin:user_read')
+
+    def delete(self, request, *args, **kwargs):
+        self.object = self.get_object()
+        self.object.is_active = False
+        self.object.save()
+        return redirect(self.success_url)
 
 
-
-@user_passes_test(lambda u: u.is_superuser)
-def category_read(request):
-    categories_list = Category.objects.all().order_by('-is_active')
-    return render(request, 'adminapp/categories.html', {'objects': categories_list})
-
-
-@user_passes_test(lambda u: u.is_superuser)
-def category_create(request):
-    form = CategoryAdminEditForm(request.POST or None, request.FILES or None)
-    if request.method == 'POST' and form.is_valid():
-        form.save()
-    return render(request, 'adminapp/category_update.html', {'form': form})
+class CategoryListView(AdminListView):
+    model = Category
+    template_name = 'adminapp/categories.html'
+    ordering = '-is_active'
 
 
-@user_passes_test(lambda u: u.is_superuser)
-def category_update(request, pk):
-    model = get_object_or_404(Category, pk=pk)
-    if request.method == 'POST':
-        form = CategoryAdminEditForm(request.POST, instance=model)
-        if form.is_valid():
-            form.save()
-            return redirect('admin:category_read')
-        else:
-            return render(request, 'adminapp/category_update.html', {'form': form})
-    form = CategoryAdminEditForm(instance=model)
-    return render(request, 'adminapp/category_update.html', {'form': form})
+class CategoryCreateView(CreateView):
+    form_class = CategoryAdminEditForm
+    template_name = 'adminapp/category_update.html'
+    success_url = reverse_lazy('admin:category_read')
 
 
-@user_passes_test(lambda u: u.is_superuser)
-def category_delete(request, pk):
-    model = get_object_or_404(Category, pk=pk)
-    if request.method == 'POST':
-        model.is_active=False
-        model.save()
-        return redirect('admin:category_read')
-    return render(request, 'adminapp/category_delete.html', {'model': model})
+class CategoryUpdateView(UpdateView):
+    form_class = CategoryAdminEditForm
+    model = Category
+    template_name = 'adminapp/category_update.html'
+    success_url = reverse_lazy('admin:category_read')
 
 
-@user_passes_test(lambda u: u.is_superuser)
-def products(request, pk):
+class CategoryDeleteView(DeleteView):
+    model = Category
+    template_name = 'adminapp/category_delete.html'
+    success_url = reverse_lazy('admin:category_read')
 
-    category = get_object_or_404(Category, pk=pk)
-    products_list = Product.objects.filter(category__pk=pk).order_by('name')
+    def delete(self, request, *args, **kwargs):
+        self.object = self.get_object()
+        self.object.is_active = False
+        self.object.save()
+        return redirect(self.success_url)
 
-    content = {
-        'category': category,
-        'objects': products_list,
-    }
 
-    return render(request, 'adminapp/products.html', content)
+class ProductListView(AdminListView):
+    template_name = 'adminapp/products.html'
+
+    def get_queryset(self):
+        pk = self.kwargs.get('pk', None)
+        return Product.objects.filter(category__pk=pk).order_by('name')
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        pk = self.kwargs.get('pk', None)
+        context['category'] = get_object_or_404(Category, pk=pk)
+        return context
+
+
+class ProductDetailView(DetailView):
+    model = Product
+    template_name = 'adminapp/product_read.html'
 
 
 @user_passes_test(lambda u: u.is_superuser)
@@ -115,12 +109,6 @@ def product_create(request, pk):
         }
 
     return render(request, 'adminapp/product_update.html', content)
-
-
-@user_passes_test(lambda u: u.is_superuser)
-def product_read(request, pk):
-    product = get_object_or_404(Product, pk=pk)
-    return render(request, 'adminapp/product_read.html', {'product': product})
 
 
 @user_passes_test(lambda u: u.is_superuser)

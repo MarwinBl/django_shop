@@ -10,21 +10,37 @@
             <a href="{% url 'category:category' slug=category.slug %}">{{ category.name|capfirst }}</a>
         </div>
 
-        {% for product in category.product_set.all %}
+        <nav class="w-100">
+            <ul class="pagination">
+                {% if products.has_previous %}
+                    <li class="page-item">
+                        <a class="page-link" href="{% url 'category:page' category.slug products.previous_page_number %}">&laquo;</a>
+                    </li>
+                {% endif %}
+                <li class="page-item">
+                    <span class="page-link">страница {{ products.number }} из
+                        {{ products.paginator.num_pages }}
+                    </span>
+                </li>
+                {% if products.has_next %}
+                    <li class="page-item">
+                        <a class="page-link" href="{% url 'category:page' category.slug products.next_page_number %}">&raquo;</a>
+                    </li>
+                {% endif %}
+            </ul>
+        </nav>
+
+        {% for product in products %}
 
         <div class="card">
             <div class="price">{{ product.price }}</div>
-            <div class="product">
-                <div>
-                    <a href="{% url 'about' product.slug %}">
-                        <img class="card-img-top" src="{{ product.image.url }}" alt="{{ product.name|capfirst }}">
-                    </a>
-                </div>
-                <div class="about-prod">
-                    <h4>{{ product.name|capfirst }}</h4>
-                    <a href="{{ product.get_absolute_url }}">Описание товара</a>
-                    <a href="{% url 'basket:add' slug=product.slug %}" class="btn btn-danger btn-sm to-basket action">в корзину</a>
-                </div>
+            <a href="{% url 'about' product.slug %}">
+                <img class="card-img-top" src="{{ product.image.url }}" alt="{{ product.name|capfirst }}">
+            </a>
+            <div class="about-prod">
+                <h4>{{ product.name|capfirst }}</h4>
+                <a href="{{ product.get_absolute_url }}">Описание товара</a>
+                <a href="{% url 'basket:add' slug=product.slug %}" class="btn btn-danger btn-sm to-basket action">в корзину</a>
             </div>
         </div>
 

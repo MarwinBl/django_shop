@@ -228,9 +228,11 @@ a[href='https://instagram.com/']>div{
 
 .card{
     margin: 10px;
-    max-width: 250px;
+    min-width: 230px;
+    max-width: 270px;
     background-color: inherit;
-    position: static;
+    display: flex;
+    justify-content: space-between;
 }
 
 .action{
@@ -277,7 +279,7 @@ a[href='https://instagram.com/']>div{
 }
 
 .product img, .card-img-top{
-    width: 100%;
+    width: 245px;
 }
 
 .insta-feed{
@@ -367,7 +369,7 @@ a[href='https://instagram.com/']>div{
 .to-basket{
     position: absolute;
     right: 0;
-    top: 0;
+    top: -31px;
 }
 
 .price{
