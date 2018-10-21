@@ -74,6 +74,7 @@ class CategoryDeleteView(DeleteView):
 
 class ProductListView(AdminListView):
     template_name = 'adminapp/products.html'
+    paginate_by = 4
 
     def get_queryset(self):
         pk = self.kwargs.get('pk', None)

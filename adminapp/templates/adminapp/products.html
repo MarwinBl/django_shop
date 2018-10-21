@@ -1,9 +1,30 @@
 {% extends 'adminapp/base.html' %}
 
-{% load staticfiles %}
+{% load staticfiles paginator_tag %}
+{% load paginator_tag %}
+
 
 {% block content %}
     <a class="btn btn-info m-1" href={% url 'admin:product_create' category.pk %}>новый продукт</a>
+    <nav class="w-100">
+        <ul class="pagination">
+            {% if page_obj.has_previous %}
+                <li class="page-item">
+                    <a class="page-link" href="{% url 'admin:products' category.pk %}{{ page_obj.previous_page_number|paginator }}">&laquo;</a>
+                </li>
+            {% endif %}
+            <li class="page-item">
+                    <span class="page-link">страница {{ page_obj.number }} из
+                        {{ page_obj.paginator.num_pages }}
+                    </span>
+            </li>
+            {% if page_obj.has_next %}
+                <li class="page-item">
+                    <a class="page-link" href="{% url 'admin:products' category.pk %}{{ page_obj.next_page_number|paginator }}">&raquo;</a>
+                </li>
+            {% endif %}
+        </ul>
+    </nav>
     <div class="card-deck">
     {% for object in object_list %}
         <div style="min-width: 250px" class="card">
