@@ -10,14 +10,6 @@ def get_basket(user):
         return Basket.get_total_count_and_price(user=user)
 
 
-def get_hot_product():
-    return Product.objects.filter(is_active=True).order_by('-quantity')[0]
-
-
-def get_same_products(product):
-    return Product.objects.filter(category__in=product.category.all(), is_active=True).exclude(pk=product.pk)[:3]
-
-
 def ajax_response(request, name, quantity):
     return JsonResponse({
         'name': name,
@@ -58,16 +50,16 @@ def add_product(request, slug):
 
 @login_required
 def del_product(request, slug, quantity):
-    is_delite = False
+    is_delete = False
     basket_item = get_object_or_404(Basket, user=request.user, product__slug=slug)
     if basket_item.quantity - quantity <= 0:
         basket_item.delete()
-        is_delite = True
+        is_delete = True
     else:
         basket_item.quantity = basket_item.quantity - quantity
         basket_item.save()
 
     if request.is_ajax():
-        return ajax_response(request, basket_item.product.slug, 0 if is_delite else basket_item.quantity)
+        return ajax_response(request, basket_item.product.slug, 0 if is_delete else basket_item.quantity)
 
     return redirect(request.META.get('HTTP_REFERER'))

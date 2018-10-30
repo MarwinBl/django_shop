@@ -1,7 +1,7 @@
 from django.shortcuts import render, get_object_or_404
 from django.core.paginator import Paginator, EmptyPage
 from mainapp.models import *
-from basketapp.views import get_basket, get_hot_product, get_same_products
+from basketapp.views import get_basket
 
 
 MENU = (
@@ -11,6 +11,14 @@ MENU = (
 )
 
 context = {'memu_link': MENU}
+
+
+def get_hot_product():
+    return Product.objects.filter(is_active=True).order_by('-quantity').first()
+
+
+def get_same_products(product):
+    return Product.objects.filter(category__in=product.category.all(), is_active=True).exclude(pk=product.pk)[:3]
 
 
 def index(request):
