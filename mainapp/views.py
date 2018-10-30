@@ -4,13 +4,13 @@ from mainapp.models import *
 from basketapp.views import get_basket
 
 
-MENU = (
-    {'href': 'index', 'name': 'главная', 'submenu': False},
-    {'href': 'category:index', 'name': 'категории', 'submenu': Category.objects.filter(is_active=True)},
-    {'href': 'contact', 'name': 'контакты', 'submenu': False},
-)
-
-context = {'memu_link': MENU}
+def get_menu_context():
+    return {'memu_link': [
+        {'href': 'index', 'name': 'главная', 'submenu': False},
+        {'href': 'category:index', 'name': 'категории', 'submenu': Category.active_objects.all()
+         },
+        {'href': 'contact', 'name': 'контакты', 'submenu': False},
+    ]}
 
 
 def get_hot_product():
@@ -22,6 +22,7 @@ def get_same_products(product):
 
 
 def index(request):
+    context = get_menu_context()
     context['basket'] = get_basket(request.user)
     context['hot_product'] = get_hot_product()
     context['same_product'] = get_same_products(context['hot_product'])
@@ -29,6 +30,7 @@ def index(request):
 
 
 def category(request, slug=None, page=1):
+    context = get_menu_context()
     context['basket'] = get_basket(request.user)
     if slug:
         category = get_object_or_404(Category, slug=slug, is_active=True)
@@ -43,12 +45,13 @@ def category(request, slug=None, page=1):
 
         return render(request, 'mainapp/category.html', context)
     else:
-        _categories = Category.objects.filter(is_active=True)
-        context['categories'] = _categories
+        context['categories'] = Category.active_objects.all()
+
         return render(request, 'mainapp/categories.html', context)
 
 
 def about(request, product):
+    context = get_menu_context()
     context['basket'] = get_basket(request.user)
     _product = get_object_or_404(Product, slug=product, is_active=True)
     context['product'] = _product
@@ -56,5 +59,6 @@ def about(request, product):
 
 
 def contact(request):
+    context = get_menu_context()
     context['basket'] = get_basket(request.user)
     return render(request, 'mainapp/contact.html', context)

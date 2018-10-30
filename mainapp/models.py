@@ -2,6 +2,11 @@ from django.db import models
 from django.shortcuts import reverse
 
 
+class ActiveCategoryManager(models.Manager):
+    def get_queryset(self):
+        return super().get_queryset().filter(is_active=True, product__is_active=True).distinct()
+
+
 class Category(models.Model):
     name = models.CharField(verbose_name='Название', max_length=64, unique=True)
     slug = models.SlugField(max_length=150, unique=True)
@@ -10,6 +15,9 @@ class Category(models.Model):
 
     def __str__(self):
         return self.name
+
+    objects = models.Manager()
+    active_objects = ActiveCategoryManager()
 
 
 class Product(models.Model):
