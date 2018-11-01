@@ -24,6 +24,7 @@
             {% endif %}
         </ul>
     </nav>
+
     <div class="card-deck">
     {% for object in object_list %}
         <div style="min-width: 250px" class="card">
@@ -34,7 +35,11 @@
                 <div>
                     <a class="btn btn-link btn-sm" href="{% url 'admin:product_read' object.pk %}">подробнее</a>
                     <a class="btn btn-link btn-sm" href="{% url 'admin:product_update' object.pk %}">редактировать</a>
-                    <a class="btn btn-link btn-sm" href="{% url 'admin:product_delete' object.pk %}">удалить</a>
+                    {% if object.is_active %}
+                        <a class="btn btn-link btn-sm" href="{% url 'admin:product_delete' object.pk %}">удалить</a>
+                    {% else %}
+                        <a class="btn btn-link btn-sm" href="{% url 'admin:product_restore' object.pk %}">восстановить</a>
+                    {% endif %}
                 </div>
             </div>
             <div class="card-footer">

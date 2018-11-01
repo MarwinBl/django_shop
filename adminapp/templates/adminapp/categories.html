@@ -20,9 +20,15 @@
                 <a class="btn btn-primary btn-sm" href={% url 'admin:category_update' object.pk %}>
                     редактировать
                 </a>
-                <a class="btn btn-primary btn-sm" href={% url 'admin:category_delete' object.pk %}>
-                    удалить
-                </a>
+                {% if object.is_active %}
+                    <a class="btn btn-primary btn-sm" href={% url 'admin:category_delete' object.pk %}>
+                        удалить
+                    </a>
+                {% else %}
+                    <a class="btn btn-primary btn-sm" href={% url 'admin:category_restore' object.pk %}>
+                        восстановить
+                    </a>
+                {% endif %}
             </div>
             <small>
                 {{ object.description }}

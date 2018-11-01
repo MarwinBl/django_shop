@@ -1,0 +1,23 @@
+{% extends 'adminapp/base.html' %}
+{% load staticfiles %}
+
+
+{% block content %}
+    <div class="category_delete">Уверены, что хотите
+        {% if is_active %}
+            восстановить
+        {% else %}
+            удалить
+        {% endif %}
+        {{ object }}?
+        <form method="post">
+            {% csrf_token %}
+            {% if is_active %}
+                <input class="btn btn-success" type="submit" value="восстановить">
+            {% else %}
+                <input class="btn btn-danger" type="submit" value="удалить">
+            {% endif %}
+            <a class="btn btn-link" href="{{ request.META.HTTP_REFERER }}">отмена</a>
+        </form>
+    </div>
+{% endblock %}
