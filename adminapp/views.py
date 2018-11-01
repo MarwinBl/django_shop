@@ -15,14 +15,14 @@ class UserListView(AdminListView):
 
 class UserCreateView(AdminCreateView):
     form_class = ShopUserRegistrationForm
-    template_name = 'adminapp/user_update.html'
+    template_name = 'adminapp/object_update.html'
     success_url = reverse_lazy('admin:user_read')
 
 
 class UserUpdateView(AdminUpdateView):
     form_class = ShopUserAdminEditForm
     model = ShopUser
-    template_name = 'adminapp/user_update.html'
+    template_name = 'adminapp/object_update.html'
     success_url = reverse_lazy('admin:user_read')
 
 
@@ -47,14 +47,14 @@ class CategoryListView(AdminListView):
 
 class CategoryCreateView(AdminCreateView):
     form_class = CategoryAdminEditForm
-    template_name = 'adminapp/category_update.html'
+    template_name = 'adminapp/object_update.html'
     success_url = reverse_lazy('admin:category_read')
 
 
 class CategoryUpdateView(AdminUpdateView):
     form_class = CategoryAdminEditForm
     model = Category
-    template_name = 'adminapp/category_update.html'
+    template_name = 'adminapp/object_update.html'
     success_url = reverse_lazy('admin:category_read')
 
 
@@ -93,7 +93,7 @@ class ProductDetailView(AdminDetailView):
 
 class ProductCreateView(AdminCreateView):
     form_class = ProductAdminEditForm
-    template_name = 'adminapp/product_update.html'
+    template_name = 'adminapp/object_update.html'
 
     def get_success_url(self):
         return reverse_lazy('admin:products', kwargs={'pk': self.kwargs.get('pk')})
@@ -108,15 +108,10 @@ class ProductCreateView(AdminCreateView):
 class ProductUpdateView(AdminUpdateView):
     form_class = ProductAdminEditForm
     model = Product
-    template_name = 'adminapp/product_update.html'
+    template_name = 'adminapp/object_update.html'
 
     def get_success_url(self):
         return reverse_lazy('admin:product_read', kwargs={'pk': self.kwargs.get('pk')})
-
-    def get_context_data(self, **kwargs):
-        context = super().get_context_data(**kwargs)
-        context['categories'] = self.object.category.all()
-        return context
 
 
 class ProductDeleteView(AdminDeleteView):
