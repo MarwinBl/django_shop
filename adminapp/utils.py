@@ -19,11 +19,11 @@ class AdminListView(AdminBaseView, ListView):
 
 
 class AdminCreateView(AdminBaseView, CreateView):
-    pass
+    template_name = 'adminapp/object_update.html'
 
 
 class AdminUpdateView(AdminBaseView, UpdateView):
-    pass
+    template_name = 'adminapp/object_update.html'
 
 
 class AdminDetailView(AdminBaseView, DetailView):
