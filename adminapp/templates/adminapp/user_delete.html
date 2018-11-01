@@ -4,11 +4,11 @@
 
 {% block content %}
     <div class="user_delete">
-        Уверены, что хотите удалить {{ user.username }}
-        {% if user.first_name %}
-            ({{ user.first_name|title }}
-            {% if user.last_name %}
-                {{ user.last_name|title }}
+        Уверены, что хотите удалить {{ object.username }}
+        {% if object.first_name %}
+            ({{ object.first_name|title }}
+            {% if object.last_name %}
+                {{ object.last_name|title }}
             {% endif %})
         {% endif %}
         ?
