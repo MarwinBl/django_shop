@@ -1,6 +1,5 @@
 {% extends 'adminapp/base.html' %}
 
-{% load staticfiles paginator_tag %}
 {% load paginator_tag %}
 
 
@@ -14,9 +13,9 @@
                 </li>
             {% endif %}
             <li class="page-item">
-                    <span class="page-link">страница {{ page_obj.number }} из
-                        {{ page_obj.paginator.num_pages }}
-                    </span>
+                <span class="page-link">страница {{ page_obj.number }} из
+                    {{ page_obj.paginator.num_pages }}
+                </span>
             </li>
             {% if page_obj.has_next %}
                 <li class="page-item">

@@ -42,7 +42,7 @@ class UserDeleteView(AdminDeleteView):
 class CategoryListView(AdminListView):
     model = Category
     template_name = 'adminapp/categories.html'
-    ordering = '-is_active'
+    ordering = ('-is_active', 'name')
 
 
 class CategoryCreateView(AdminCreateView):
@@ -90,54 +90,40 @@ class ProductDetailView(AdminDetailView):
     template_name = 'adminapp/product_read.html'
 
 
-@user_passes_test(lambda u: u.is_superuser)
-def product_create(request, pk):
-    category = get_object_or_404(Category, pk=pk)
+class ProductCreateView(AdminCreateView):
+    form_class = ProductAdminEditForm
+    template_name = 'adminapp/product_update.html'
 
-    if request.method == 'POST':
-        product_form = ProductAdminEditForm(request.POST, request.FILES)
-        if product_form.is_valid():
-            product_form.save()
-            return redirect('admin:products', pk=pk)
-    else:
-        product_form = ProductAdminEditForm(initial={'category': category})
+    def get_success_url(self):
+        return reverse_lazy('admin:products', kwargs={'pk': self.kwargs.get('pk')})
 
-    content = {
-        'form': product_form,
-        'category': category
-        }
-
-    return render(request, 'adminapp/product_update.html', content)
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        pk = self.kwargs.get('pk', None)
+        context['category'] = get_object_or_404(Category, pk=pk)
+        return context
 
 
-@user_passes_test(lambda u: u.is_superuser)
-def product_update(request, pk):
-    product = get_object_or_404(Product, pk=pk)
+class ProductUpdateView(AdminUpdateView):
+    form_class = ProductAdminEditForm
+    model = Product
+    template_name = 'adminapp/product_update.html'
 
-    if request.method == 'POST':
-        product_form = ProductAdminEditForm(request.POST, request.FILES, instance=product)
-        if product_form.is_valid():
-            product_form.save()
-            return redirect('admin:product_read', pk=pk)
-    else:
-        product_form = ProductAdminEditForm(instance=product)
+    def get_success_url(self):
+        return reverse_lazy('admin:product_read', kwargs={'pk': self.kwargs.get('pk')})
 
-    content = {
-               'form': product_form,
-               'categories': product.category.all(),
-               }
-
-    return render(request, 'adminapp/product_update.html', content)
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['categories'] = self.object.category.all()
+        return context
 
 
-@user_passes_test(lambda u: u.is_superuser)
-def product_delete(request, pk):
-    product = get_object_or_404(Product, pk=pk)
+class ProductDeleteView(AdminDeleteView):
+    model = Product
+    template_name = 'adminapp/product_delete.html'
 
-    if request.method == 'POST':
-        product.is_active = False
-        product.save()
-        return redirect('admin:products', pk=product.category.first().pk)
-
-    return render(request, 'adminapp/product_delete.html', {'product': product})
-
+    def delete(self, request, *args, **kwargs):
+        self.object = self.get_object()
+        self.object.is_active = False
+        self.object.save()
+        return redirect('admin:products', pk=self.object.category.first().pk)
