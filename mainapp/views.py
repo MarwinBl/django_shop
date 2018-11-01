@@ -48,7 +48,6 @@ def category(request, context, slug=None, page=1):
         return render(request, 'mainapp/category.html', context)
     else:
         context['categories'] = Category.active_objects.all()
-
         return render(request, 'mainapp/categories.html', context)
 
 
