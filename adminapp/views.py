@@ -1,13 +1,11 @@
 from django.shortcuts import render, get_object_or_404, redirect
 from django.urls import reverse_lazy
 from django.contrib.auth.decorators import user_passes_test
-from django.views.generic.edit import CreateView, UpdateView, DeleteView
-from django.views.generic.detail import DetailView
 from mainapp.models import Product, Category
 from authapp.models import ShopUser
 from authapp.forms import ShopUserRegistrationForm
 from adminapp.forms import ShopUserAdminEditForm, CategoryAdminEditForm, ProductAdminEditForm
-from .utils import AdminListView
+from .utils import AdminListView, AdminCreateView, AdminUpdateView, AdminDetailView, AdminDeleteView
 
 
 class UserListView(AdminListView):
@@ -16,20 +14,20 @@ class UserListView(AdminListView):
     ordering = ('-is_active', '-is_superuser', '-is_staff', 'username')
 
 
-class UserCreateView(CreateView):
+class UserCreateView(AdminCreateView):
     form_class = ShopUserRegistrationForm
     template_name = 'adminapp/user_update.html'
     success_url = reverse_lazy('admin:user_read')
 
 
-class UserUpdateView(UpdateView):
+class UserUpdateView(AdminUpdateView):
     form_class = ShopUserAdminEditForm
     model = ShopUser
     template_name = 'adminapp/user_update.html'
     success_url = reverse_lazy('admin:user_read')
 
 
-class UserDeleteView(DeleteView):
+class UserDeleteView(AdminDeleteView):
     model = ShopUser
     template_name = 'adminapp/user_delete.html'
     success_url = reverse_lazy('admin:user_read')
@@ -47,20 +45,20 @@ class CategoryListView(AdminListView):
     ordering = '-is_active'
 
 
-class CategoryCreateView(CreateView):
+class CategoryCreateView(AdminCreateView):
     form_class = CategoryAdminEditForm
     template_name = 'adminapp/category_update.html'
     success_url = reverse_lazy('admin:category_read')
 
 
-class CategoryUpdateView(UpdateView):
+class CategoryUpdateView(AdminUpdateView):
     form_class = CategoryAdminEditForm
     model = Category
     template_name = 'adminapp/category_update.html'
     success_url = reverse_lazy('admin:category_read')
 
 
-class CategoryDeleteView(DeleteView):
+class CategoryDeleteView(AdminDeleteView):
     model = Category
     template_name = 'adminapp/category_delete.html'
     success_url = reverse_lazy('admin:category_read')
@@ -87,7 +85,7 @@ class ProductListView(AdminListView):
         return context
 
 
-class ProductDetailView(DetailView):
+class ProductDetailView(AdminDetailView):
     model = Product
     template_name = 'adminapp/product_read.html'
 
