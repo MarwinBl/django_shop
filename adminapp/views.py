@@ -26,13 +26,11 @@ class UserUpdateView(AdminUpdateView):
 
 class UserDeleteView(AdminDeleteView):
     model = ShopUser
-    template_name = 'adminapp/object_del_or_restore.html'
     success_url = 'admin:user_read'
 
 
 class UserRestoreView(AdminDeleteView):
     model = ShopUser
-    template_name = 'adminapp/object_del_or_restore.html'
     success_url = 'admin:user_read'
     is_active = True
 
@@ -56,13 +54,11 @@ class CategoryUpdateView(AdminUpdateView):
 
 class CategoryDeleteView(AdminDeleteView):
     model = Category
-    template_name = 'adminapp/object_del_or_restore.html'
     success_url = 'admin:category_read'
 
 
 class CategoryRestoreView(AdminDeleteView):
     model = Category
-    template_name = 'adminapp/object_del_or_restore.html'
     success_url = 'admin:category_read'
     is_active = True
 
@@ -104,7 +100,6 @@ class ProductUpdateView(AdminUpdateView):
 
 class ProductDeleteView(AdminDeleteView):
     model = Product
-    template_name = 'adminapp/object_del_or_restore.html'
     success_url = 'admin:products'
 
     def get_success_url_kwargs(self):
@@ -113,7 +108,6 @@ class ProductDeleteView(AdminDeleteView):
 
 class ProductRestoreView(AdminDeleteView):
     model = Product
-    template_name = 'adminapp/object_del_or_restore.html'
     success_url = 'admin:products'
     is_active = True
 

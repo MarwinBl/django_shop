@@ -32,6 +32,7 @@ class AdminDetailView(AdminBaseView, DetailView):
 
 
 class AdminDeleteView(AdminBaseView, DeleteView):
+    template_name = 'adminapp/object_del_or_restore.html'
     success_url_kwargs = None
     object_name = None
     is_active = False
