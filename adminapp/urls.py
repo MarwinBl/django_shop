@@ -20,4 +20,5 @@ urlpatterns = [
     path('product/update/<int:pk>/', adminapp.ProductUpdateView.as_view(), name='product_update'),
     path('product/delete/<int:pk>/', adminapp.ProductDeleteView.as_view(), name='product_delete'),
     path('product/restore/<int:pk>/', adminapp.ProductRestoreView.as_view(), name='product_restore'),
+    path('ajax/confirm/', adminapp.AjaxGeneralConfirm.as_view(), name='ajax_confirm'),
 ]

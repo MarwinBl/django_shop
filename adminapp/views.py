@@ -4,7 +4,7 @@ from mainapp.models import Product, Category
 from authapp.models import ShopUser
 from authapp.forms import ShopUserRegistrationForm
 from adminapp.forms import ShopUserAdminEditForm, CategoryAdminEditForm, ProductAdminEditForm
-from .utils import AdminListView, AdminCreateView, AdminUpdateView, AdminDetailView, AdminDeleteView
+from .utils import AdminListView, AdminCreateView, AdminUpdateView, AdminDetailView, AdminDeleteView, AdminAjaxConfirmView
 
 
 class UserListView(AdminListView):
@@ -119,4 +119,13 @@ class ProductRestoreView(AdminDeleteView):
 
     def get_success_url_kwargs(self):
         return {'pk': self.object.category.first().pk}
+
+
+
+class AjaxGeneralConfirm(AdminAjaxConfirmView):
+    models_dict = {
+        'user': ShopUser,
+        'category': Category,
+        'product': Product
+    }
 

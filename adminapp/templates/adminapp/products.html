@@ -27,27 +27,42 @@
 
     <div class="card-deck">
     {% for object in object_list %}
-        <div style="min-width: 250px" class="card">
+        <div style="min-width: 250px" class="card {% if not object.is_active %}disabled{% endif %}">
             <img width="245px" class="card-img-top" src="{{object.image.url }}" alt="{{ object.name }}">
             <div class="card-body">
-                <h5 class="card-title">{{ object.name|title }}</h5>
+                <h5 id="name" class="card-title">{{ object.name|title }}</h5>
                 <p class="card-text">{{ object.short_desc }}</p>
                 <div>
                     <a class="btn btn-link btn-sm" href="{% url 'admin:product_read' object.pk %}">подробнее</a>
                     <a class="btn btn-link btn-sm" href="{% url 'admin:product_update' object.pk %}">редактировать</a>
                     {% if object.is_active %}
-                        <a class="btn btn-link btn-sm" href="{% url 'admin:product_delete' object.pk %}">удалить</a>
+                        <a  action="del"
+                            object="product/{{ object.pk }}"
+                            parent="card"
+                            url="{% url 'admin:ajax_confirm' %}"
+                            class="btn btn-link btn-sm"
+                            href="{% url 'admin:product_delete' object.pk %}">удалить
+                        </a>
                     {% else %}
-                        <a class="btn btn-link btn-sm" href="{% url 'admin:product_restore' object.pk %}">восстановить</a>
+                        <a action="restore"
+                           object="product/{{ object.pk }}"
+                           parent="card"
+                           url="{% url 'admin:ajax_confirm' %}"
+                           class="btn btn-link btn-sm"
+                           href="{% url 'admin:product_restore' object.pk %}">восстановить
+                        </a>
                     {% endif %}
                 </div>
             </div>
             <div class="card-footer">
                 <small class="text-muted">цена: {{ object.price }}</small>
                 <small class="text-muted">кол-во: {{ object.quantity }}</small>
-                {% if not object.is_active %}<small class="text-muted float-right">удален</small>{% endif %}
             </div>
         </div>
     {% endfor%}
     </div>
+{% endblock %}
+
+{% block confirm %}
+    {% include 'adminapp/includes/inc_confirm.html' %}
 {% endblock %}

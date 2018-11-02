@@ -10,7 +10,7 @@
                                 {% if not object.is_active %}disabled{% endif %}">
                 <div class="d-flex justify-content-between">
                     <img class="rounded float-left" width="50px" height="50px" src="{{ object.avatar.url }}" alt="{{ object.username }}">
-                    <h5 class="mb-1">{{ object.username }}</h5>
+                    <h5 id="name" class="mb-1">{{ object.username }}</h5>
                     <p class="mb-1">
                         {% if object.first_name %}
                             <small>{{ object.first_name|title }}</small>
@@ -31,9 +31,21 @@
                 <div class="btn-group" role="group">
                     <a class="btn btn-primary btn-sm" href="{% url 'admin:user_update' object.pk %}">редактировать</a>
                     {% if object.is_active %}
-                        <a class="btn btn-primary btn-sm" href="{% url 'admin:user_delete' object.pk %}">удалить</a>
+                        <a action="del"
+                           object="user/{{ object.pk }}"
+                           parent="list-group-item"
+                           url="{% url 'admin:ajax_confirm' %}"
+                           class="btn btn-primary btn-sm"
+                           href="{% url 'admin:user_delete' object.pk %}">удалить
+                        </a>
                     {% else %}
-                        <a class="btn btn-primary btn-sm" href="{% url 'admin:user_restore' object.pk %}">восстановить</a>
+                        <a action="restore"
+                           object="user/{{ object.pk }}"
+                           parent="list-group-item"
+                           url="{% url 'admin:ajax_confirm' %}"
+                           class="btn btn-primary btn-sm"
+                           href="{% url 'admin:user_restore' object.pk %}">восстановить
+                        </a>
                     {% endif %}
                 </div>
                 <div>
@@ -44,4 +56,8 @@
             </div>
         {% endfor%}
     </div>
+{% endblock %}
+
+{% block confirm %}
+    {% include 'adminapp/includes/inc_confirm.html' %}
 {% endblock %}

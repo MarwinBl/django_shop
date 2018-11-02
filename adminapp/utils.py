@@ -6,6 +6,7 @@ from django.utils.decorators import method_decorator
 from django.contrib.auth.decorators import user_passes_test
 from django.shortcuts import redirect
 from django.urls import reverse_lazy
+from django.http import HttpResponseNotAllowed, JsonResponse
 
 
 class AdminBaseView(View):
@@ -52,3 +53,30 @@ class AdminDeleteView(AdminBaseView, DeleteView):
         context['is_active'] = self.is_active
         return context
 
+
+class AdminAjaxConfirmView(View):
+    models_dict = {}
+
+    @method_decorator(user_passes_test(lambda u: u.is_superuser))
+    def dispatch(self, *args, **kwargs):
+        if self.request.is_ajax():
+            _request = self.request.POST.dict()
+            _action = _request['action']
+            _model, _pk = _request['object'].split('/')
+            if self.delete_or_restore_obj(self.models_dict[_model], _pk, _action):
+                return JsonResponse({'status': True})
+            else:
+                return JsonResponse({'status': False,
+                                     'message': 'Да прост вот ошибка'})
+        return HttpResponseNotAllowed
+
+    @staticmethod
+    def delete_or_restore_obj(model, pk, action):
+        try:
+            object = model.objects.get(pk=pk)
+            object.is_active = False if action == 'del' else True
+            object.save()
+        except:
+            return False
+        else:
+            return True
