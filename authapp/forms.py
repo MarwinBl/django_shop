@@ -47,6 +47,20 @@ class ShopUserRegistrationForm(UserCreationForm):
             raise ValidationError('Вы слишком молоды для этого.')
         return self.cleaned_data['age']
 
+    def clean_email(self):
+        email = self.cleaned_data['email']
+        if ShopUser.objects.filter(email=email).exists():
+            raise ValidationError('Этот почтовый ящик уже занят')
+        else:
+            return email
+
+    def save(self, commit=True):
+        user = super().save(commit)
+        user.is_active = False
+        user.set_activation_key()
+        user.save()
+        return user
+
 
 class ShopUserEditForm(UserChangeForm):
     class Meta:

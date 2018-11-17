@@ -1,0 +1,25 @@
+{% extends 'authapp/base.html' %}
+
+{% block container %}
+
+    {% if not errors %}
+
+        <div class="alert alert-success d-flex" role="alert">
+            <i class="material-icons p-2">done_outline</i>
+            <div class="p-2">Ваш аккаунт подтвержден.</div>
+        </div>
+
+    {% else %}
+
+        {% for error, message in errors.items %}
+
+        <div class="alert alert-danger d-flex" role="alert">
+            <i class="material-icons p-2">info</i>
+            <div class="p-2">{{ message }}</div>
+        </div>
+
+        {% endfor %}
+
+    {% endif %}
+
+{% endblock %}

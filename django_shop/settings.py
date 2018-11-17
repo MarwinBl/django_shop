@@ -141,3 +141,8 @@ EMAIL_PORT = '25'
 EMAIL_HOST_USER = 'django@djangoshop.local'
 EMAIL_HOST_PASSWORD = 'djangoshop'
 EMAIL_USE_SSL = False
+
+
+EMAIL_BACKEND = 'django.core.mail.backends.filebased.EmailBackend'
+EMAIL_FILE_PATH = 'tmp/email-messages/'
+
