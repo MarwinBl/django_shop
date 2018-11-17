@@ -133,3 +133,11 @@ STATICFILES_DIRS = (
 
 MEDIA_URL = '/media/'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
+
+DOMAIN_NAME = 'http://localhost:8000'
+
+EMAIL_HOST = 'localhost'
+EMAIL_PORT = '25'
+EMAIL_HOST_USER = 'django@djangoshop.local'
+EMAIL_HOST_PASSWORD = 'djangoshop'
+EMAIL_USE_SSL = False
