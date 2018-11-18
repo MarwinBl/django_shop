@@ -31,14 +31,14 @@ def index(request):
 @login_required
 def add_product(request, slug):
     product = get_object_or_404(Product, slug=slug)
-    old_item = Basket.objects.filter(user=request.user, product=product).first()
-    if old_item:
-        old_item.quantity += 1
-        old_item.save()
+    exists_item = Basket.objects.filter(user=request.user, product=product).first()
+    if exists_item:
+        exists_item.quantity += 1
+        exists_item.save()
     else:
-        new_item = Basket(product=product, user=request.user)
-        new_item.save()
-    item = old_item or new_item
+        exists_item = Basket(product=product, user=request.user)
+        exists_item.save()
+    item = exists_item
 
     if request.is_ajax():
         return ajax_response(request, item.product.slug, item.quantity)
