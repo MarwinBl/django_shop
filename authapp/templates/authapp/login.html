@@ -11,5 +11,8 @@
         <input type="hidden" name="next" value="{{ next }}">
         {{ login_form.as_p }}
         <input class="form-control" type="submit" value="войти">
+        <div class="btn-group" role="group">
+            <a href="{% url 'auth:social:begin' 'google-oauth2' %}?next=/" class="btn btn-link">Google+</a>
+        </div>
     </form>
 {% endblock %}
