@@ -17,7 +17,12 @@ def send_verify_email(user):
                 {settings.DOMAIN_NAME} перейдите по <a href="{settings.DOMAIN_NAME}{verify_link}">ссылке</a>.</div>
                  <div>Если ссылка не открылась, скопируйте текст в адресную строку браузера</div>
                  <div style="background-color:#fff51f">{settings.DOMAIN_NAME}{verify_link}</div>'''
-    return send_mail(title, message, settings.EMAIL_HOST_USER, [user.email], fail_silently=False, html_message=html_message)
+    return send_mail(title,
+                     message,
+                     settings.EMAIL_HOST_USER,
+                     [user.email],
+                     fail_silently=False,
+                     html_message=html_message)
 
 
 @user_passes_test(lambda u: u.is_anonymous, login_url='index', redirect_field_name=None)
