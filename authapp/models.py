@@ -7,7 +7,7 @@ from django.contrib.auth.models import AbstractUser
 
 class ShopUser(AbstractUser):
     avatar = models.ImageField(upload_to='users_avatar', default='users_avatar/default_user.png')
-    age = models.PositiveSmallIntegerField(verbose_name='Возраст')
+    age = models.PositiveSmallIntegerField(verbose_name='Возраст', default=18)
     activation_key = models.CharField(max_length=128, blank=True)
     activation_key_expires = models.DateTimeField(default=(now() + timedelta(hours=48)))
 
