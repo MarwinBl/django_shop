@@ -1,5 +1,6 @@
 from django.shortcuts import render, redirect, reverse, get_object_or_404
 from django.contrib import auth
+from django.contrib.auth.decorators import user_passes_test, login_required
 from django.conf import settings
 from django.core.mail import send_mail
 
@@ -19,6 +20,7 @@ def send_verify_email(user):
     return send_mail(title, message, settings.EMAIL_HOST_USER, [user.email], fail_silently=False, html_message=html_message)
 
 
+@user_passes_test(lambda u: u.is_anonymous, login_url='index', redirect_field_name=None)
 def login(request):
     login_form = ShopUserLoginForm(data=request.POST or None)
     index_page = reverse('index')
@@ -40,6 +42,7 @@ def logout(request):
     return redirect('index')
 
 
+@user_passes_test(lambda u: u.is_anonymous, login_url='index', redirect_field_name=None)
 def registration(request):
     reg_form = ShopUserRegistrationForm(request.POST or None, request.FILES or None)
     if request.method == 'POST' and reg_form.is_valid():
@@ -49,6 +52,7 @@ def registration(request):
     return render(request, 'authapp/registration.html', {'reg_form': reg_form})
 
 
+@login_required
 def edit(request):
     if request.method == 'POST':
         edit_form = ShopUserEditForm(request.POST, request.FILES, instance=request.user)
@@ -63,7 +67,7 @@ def verify(request, email, activation_key):
     user = get_object_or_404(ShopUser, email=email)
     errors = {}
     context = dict(errors=errors)
-    if user.activation_key == activation_key:
+    if user.activation_key == activation_key and not user.is_active:
         if not user.activation_key_expired():
             user.is_active = True
             user.save()
