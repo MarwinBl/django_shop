@@ -115,7 +115,6 @@ class ProductRestoreView(AdminDeleteView):
         return {'pk': self.object.category.first().pk}
 
 
-
 class AjaxGeneralConfirm(AdminAjaxConfirmView):
     models_dict = {
         'user': ShopUser,
