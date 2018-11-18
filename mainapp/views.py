@@ -1,7 +1,6 @@
 from django.shortcuts import render, get_object_or_404
 from django.core.paginator import Paginator, EmptyPage
 from mainapp.models import *
-from basketapp.views import get_basket
 
 
 def menu_decorator(func):
@@ -25,7 +24,6 @@ def get_same_products(product):
 
 @menu_decorator
 def index(request, context):
-    context['basket'] = get_basket(request.user)
     context['hot_product'] = get_hot_product()
     context['same_product'] = get_same_products(context['hot_product'])
     return render(request, 'mainapp/index.html', context)
@@ -33,7 +31,6 @@ def index(request, context):
 
 @menu_decorator
 def category(request, context, slug=None, page=1):
-    context['basket'] = get_basket(request.user)
     if slug:
         category = get_object_or_404(Category, slug=slug, is_active=True)
         products = category.product_set.filter(is_active=True).order_by('-price')
@@ -53,7 +50,6 @@ def category(request, context, slug=None, page=1):
 
 @menu_decorator
 def about(request, context, product):
-    context['basket'] = get_basket(request.user)
     _product = get_object_or_404(Product, slug=product, is_active=True)
     context['product'] = _product
     return render(request, 'mainapp/about.html', context)
@@ -61,5 +57,4 @@ def about(request, context, product):
 
 @menu_decorator
 def contact(request, context):
-    context['basket'] = get_basket(request.user)
     return render(request, 'mainapp/contact.html', context)

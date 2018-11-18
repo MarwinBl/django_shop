@@ -5,16 +5,12 @@ from mainapp.models import Product
 from basketapp.models import Basket
 
 
-def get_basket(user):
-    if user.is_authenticated:
-        return Basket.get_total_count_and_price(user=user)
-
-
+@login_required
 def ajax_response(request, name, quantity):
     return JsonResponse({
         'name': name,
         'quantity': quantity,
-        'basket': get_basket(request.user)
+        'basket': Basket.get_total_count_and_price(user=request.user)
     })
 
 
@@ -23,7 +19,6 @@ def index(request):
     basket_items = Basket.objects.filter(user=request.user)
     context = {
         'basket_items': basket_items,
-        'basket': get_basket(request.user),
     }
     return render(request, 'basketapp/basket.html', context=context)
 
@@ -38,10 +33,9 @@ def add_product(request, slug):
     else:
         exists_item = Basket(product=product, user=request.user)
         exists_item.save()
-    item = exists_item
 
     if request.is_ajax():
-        return ajax_response(request, item.product.slug, item.quantity)
+        return ajax_response(request, exists_item.product.slug, exists_item.quantity)
 
     if 'login' in request.META.get('HTTP_REFERER'):
         return redirect('about', product=slug)
