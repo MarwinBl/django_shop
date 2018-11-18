@@ -7,7 +7,7 @@
 
 {% block content %}
 
-    <div class="card-deck">
+    <div class="card-deck d-flex h-100 justify-content-center">
     {% if basket_items %}
         {% for item in basket_items %}
             <div class="card">
@@ -38,11 +38,11 @@
                 </div>
             </div>
         {% endfor %}
-        <div style="display: none" id="basket-empty" class="alert alert-info" role="alert">
+        <div style="display: none" id="basket-empty" class="alert alert-info align-self-center" role="alert">
             Корзина пуста
         </div>
     {% else %}
-        <div id="basket-empty" class="alert alert-info" role="alert">
+        <div id="basket-empty" class="alert alert-info align-self-center" role="alert">
             Корзина пуста
         </div>
     {% endif %}
