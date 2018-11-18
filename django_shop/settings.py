@@ -97,7 +97,7 @@ AUTHENTICATION_BACKENDS = (
 
 SOCIAL_AUTH_URL_NAMESPACE = 'auth:social'
 
-with open('google_oauth.json') as j:
+with open('authapp/social_auth/google_oauth.json') as j:
     G = json.load(j)
 
 SOCIAL_AUTH_GOOGLE_OAUTH2_KEY = G['KEY']
