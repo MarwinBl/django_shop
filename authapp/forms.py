@@ -3,18 +3,13 @@ from django.forms.utils import ErrorList
 from django.forms import ValidationError, HiddenInput
 
 from authapp.models import ShopUser
+from authapp.utills import get_popup
 
 
 class ErrList(ErrorList):
     def __str__(self):
         if not self: return ''
-        return '<div class="errorlist">%s</div>' % ''.join([
-            '<div class="alert alert-warning alert-dismissible fade show" role="alert">\
-            %s\
-            <button type="button" class="close" data-dismiss="alert" aria-label="Close">\
-            <span aria-hidden="true">&times;</span>\
-            </button>\
-            </div>' % err for err in self])
+        return get_popup('alert-warning', self)
 
 
 class ShopUserLoginForm(AuthenticationForm):

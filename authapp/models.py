@@ -10,6 +10,7 @@ class ShopUser(AbstractUser):
     age = models.PositiveSmallIntegerField(verbose_name='Возраст', default=18)
     activation_key = models.CharField(max_length=128, blank=True)
     activation_key_expires = models.DateTimeField(default=(now() + timedelta(hours=48)))
+    email = models.EmailField(blank=False, unique=True)
 
     def activation_key_expired(self):
         if now() <= self.activation_key_expires:

@@ -8,7 +8,7 @@ urlpatterns = [
     path('logout/', authapp.logout, name='logout'),
     path('registration/', authapp.registration, name='registration'),
     path('edit/', authapp.edit, name='edit'),
+    path('email-verify/<email>/<activation_key>', authapp.verify, name='verify'),
     path('verify/google/oauth2/', include('social_django.urls', namespace='social')),
-    path('verify/<email>/<activation_key>', authapp.verify, name='verify'),
 ]
 
