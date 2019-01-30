@@ -541,7 +541,7 @@ h4+h3+p{
     justify-content: center;
 }
 
-.auth-form input{
+.auth-form input, .auth-form select{
     margin: 0 auto;
     display: block;
 }

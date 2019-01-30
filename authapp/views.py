@@ -1,9 +1,10 @@
+from django.db import transaction
 from django.http import HttpResponseNotFound
 from django.shortcuts import render, redirect, reverse, get_object_or_404
 from django.contrib import auth
 from django.contrib.auth.decorators import user_passes_test, login_required
 
-from authapp.forms import ShopUserLoginForm, ShopUserRegistrationForm, ShopUserEditForm
+from authapp.forms import ShopUserLoginForm, ShopUserRegistrationForm, ShopUserEditForm, ShopUserProfileEditForm
 from authapp.models import ShopUser
 from authapp.utills import send_verify_email, get_popup
 
@@ -48,14 +49,23 @@ def registration(request):
 
 
 @login_required
+@transaction.atomic
 def edit(request):
     if request.method == 'POST':
         edit_form = ShopUserEditForm(request.POST, request.FILES, instance=request.user)
-        if edit_form.is_valid():
+        profile_edit_form = ShopUserProfileEditForm(request.POST, instance=request.user.shopuserprofile)
+        if edit_form.is_valid() and profile_edit_form.is_valid():
             edit_form.save()
-        return render(request, 'authapp/edit.html', {'edit_form': edit_form})
+        return render(request, 'authapp/edit.html', {
+            'edit_form': edit_form,
+            'profile_edit_form': profile_edit_form,
+        })
     edit_form = ShopUserEditForm(instance=request.user)
-    return render(request, 'authapp/edit.html', {'edit_form': edit_form})
+    profile_edit_form = ShopUserProfileEditForm(instance=request.user.shopuserprofile)
+    return render(request, 'authapp/edit.html', {
+        'edit_form': edit_form,
+        'profile_edit_form': profile_edit_form,
+    })
 
 
 def verify(request, email, activation_key):
