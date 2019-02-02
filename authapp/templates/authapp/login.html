@@ -13,6 +13,7 @@
         <input class="form-control" type="submit" value="войти">
         <div class="btn-group" role="group">
             <a href="{% url 'auth:social:begin' 'google-oauth2' %}?next=/" class="btn btn-link">Google+</a>
+            <a href="{% url 'auth:registration' %}?next=/" class="btn btn-link">Регистрация</a>
         </div>
     </form>
 {% endblock %}
