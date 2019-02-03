@@ -7,7 +7,7 @@
 
 {% block content %}
 
-    <div class="card-deck d-flex h-100 justify-content-center">
+    <div class="card-deck d-flex justify-content-center">
     {% if basket_items %}
         {% for item in basket_items %}
             <div class="card">
@@ -47,6 +47,9 @@
         </div>
     {% endif %}
     </div>
+    {% if basket_items %}
+        <a class="btn btn-outline-success float-right" href="{% url 'order:create' %}">Заказать</a>
+    {% endif %}
 
 {% endblock %}
 

@@ -29,6 +29,7 @@ urlpatterns = [
     path('about/<str:product>/', mainapp.about, name='about'),
     path('category/', include(('mainapp.urls', 'mainapp'), namespace='category')),
     path('basket/', include(('basketapp.urls', 'basketapp'), namespace='basket')),
+    path('order/', include(('orderapp.urls', 'orderapp'), namespace='order')),
 ]
 
 

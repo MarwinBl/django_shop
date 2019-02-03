@@ -1,9 +1,13 @@
+from django.db import transaction
 from django.shortcuts import get_object_or_404
 from django.urls import reverse_lazy
 from mainapp.models import Product, Category
 from authapp.models import ShopUser
 from authapp.forms import ShopUserRegistrationForm
 from adminapp.forms import ShopUserAdminEditForm, CategoryAdminEditForm, ProductAdminEditForm
+from orderapp.forms import OrderForm
+from orderapp.models import Order
+from orderapp.views import FormSetMixin
 from .utils import AdminListView, AdminCreateView, AdminUpdateView, AdminDetailView, AdminDeleteView, AdminAjaxConfirmView
 
 
@@ -122,3 +126,38 @@ class AjaxGeneralConfirm(AdminAjaxConfirmView):
         'product': Product
     }
 
+
+class OrderListView(AdminListView):
+    template_name = 'adminapp/order_list.html'
+    model = Order
+
+
+class OrderUpdateView(FormSetMixin, AdminUpdateView):
+    template_name = 'adminapp/order_update.html'
+    model = Order
+    form_class = OrderForm
+    success_url = reverse_lazy('admin:order_list')
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['orderitems'] = (self.get_formset_from_post(instance=True)
+                                 if self.request.POST
+                                 else self.get_formset(formsetkwargs={'instance': self.object}))
+        return context
+
+    def form_valid(self, form):
+        formset = self.get_formset_from_post(instance=True)
+        with transaction.atomic():
+            self.object = form.save()
+            if formset.is_valid():
+                formset.instance = self.object
+                formset.save()
+
+        if self.object.get_total_cost() == 0:
+            self.object.delete()
+        return super().form_valid(form)
+
+
+class OrderDeleteView(AdminDeleteView):
+    model = Order
+    success_url = 'admin:order_list'

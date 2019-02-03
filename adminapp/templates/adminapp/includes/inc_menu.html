@@ -12,6 +12,11 @@
                 {% endif %}" href="{% url 'admin:user_read' %}
             ">Пользователи</a>
             <a class="nav-item nav-link
+                {% if request.resolver_match.url_name == 'order_list' %}
+                    active
+                {% endif %}" href="{% url 'admin:order_list' %}
+            ">Заказы</a>
+            <a class="nav-item nav-link
                 {% if request.resolver_match.url_name == 'category_read' or category.name %}
                     active
                 {% endif %}" href="{% url 'admin:category_read' %}

@@ -1,0 +1,38 @@
+{% extends 'adminapp/base.html' %}
+{% load staticfiles %}
+
+{% block content %}
+    <table class="table table-striped">
+        <thead>
+        <tr>
+            <th scope="col">ID</th>
+            <th scope="col">Пользователь</th>
+            <th scope="col">Создан</th>
+            <th scope="col">Обновлен</th>
+            <th scope="col">Статус</th>
+            <th scope="col">Действия</th>
+        </tr>
+        </thead>
+        <tbody>
+        {% for item in object_list %}
+            {% if item.is_active %}
+                <tr>
+                    <td scope="row">{{ item.pk }}</td>
+                    <td><a href="{% url 'admin:user_update' item.user.pk %}">{{ item.user.username }}</a></td>
+                    <td>{{ item.created|date:"Y-m-d H:i:s" }}</td>
+                    <td>{{ item.updated|date:"Y-m-d H:i:s" }}</td>
+                    <td>{{ item.get_status_display }}</td>
+                    <td>
+                        <a href="{% url 'admin:order_update' item.pk %}">
+                            редактировать
+                        </a>
+                        <a href="{% url 'admin:order_delete' item.pk %}">
+                            удалить
+                        </a>
+                    </td>
+                </tr>
+            {% endif %}
+        {% endfor %}
+        </tbody>
+    </table>
+{% endblock %}
