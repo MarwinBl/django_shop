@@ -21,4 +21,6 @@ class Basket(models.Model):
                 res['count'] += item.quantity
                 res['total_price'] += item.quantity * item.product.price
             return res
-
+    @classmethod
+    def get_items(cls, user):
+        return cls.objects.filter(user=user)
